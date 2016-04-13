@@ -1,0 +1,6 @@
+<ul class="nav">
+    <li ng-repeat="node in node[options.childrenField]" class="z-tree-node">
+        <div z-tree-transclude ng-click="onClickHandle($event,node)"></div>
+        <div z-tree-node ng-class="{'collapsed':$model.$collapsed,'active':$model.$active}"}></div>
+    </li>
+</ul>

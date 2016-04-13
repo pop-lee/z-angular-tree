@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.js"></script>
+    <script src="angular.1.2.29.js"></script>
+    <script src="bootstrap.3.1.1.js"></script>
+    <script src="../dist/z-angular-tree.js"></script>
+    <link rel="stylesheet" href="../dist/z-angular-tree.css" />
+</head>
+<body ng-app="example">
+    <div ng-controller="testController">
+        <div z-tree="tree" tree-data="planList">
+            <div>
+                <div ng-class="{'selected':node == select}">
+                    <button class="btn btn-xs btn-primary" ng-click="addSameLevelNode(node)">add</button>
+                    <button class="btn btn-xs btn-info" ng-click="addSubNode(node)">add sub</button>
+                    <button class="btn btn-xs btn-danger" ng-click="delNode(node)">del</button>
+                    <button class="btn btn-xs btn-danger" ng-click="toggle(node)">toggle</button>
+                    {{node.label}} -- collapsed:"{{$model.$collapsed}}" -- active:"{{$model.$active}}" -- selected:"{{$model.$selected}}"
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var example = angular.module("example",['z.angular.tree']);
+        var testController = function($scope) {
+            $scope.planList =
+                    [{
+                        "label": "a",
+                        "children": []
+                    }, {
+                        "label": "b",
+                        "children": [{
+                            "label": "b1",
+                            "children": [{
+                                "label": "b1-1",
+                                "children": []
+                            },{
+                                "label": "b1-2",
+                                "children": []
+                            }]
+                        }]
+                    }]
+            ;
+
+
+
+            // 引用树形对象,用来操作树
+            $scope.tree = {};
+            $scope.delNode = function(node) {
+                $scope.tree.delNode(node);
+            }
+            $scope.addSameLevelNode = function(node) {
+                var newNode = {
+                    "label": "new",
+                    "children": []
+                }
+                $scope.tree.addAfterNode(newNode,node);
+            }
+            $scope.addSubNode = function(node) {
+                var newNode = {
+                    "id": 8,
+                    "pId": 7,
+                    "code": "m_7",
+                    "label": "报表预设条件设置2",
+                    "url": "reportDepartment/reportDepartmentList",
+                    "alias": "报表预设条件设置",
+                    "isHomePage": null,
+                    "children": []
+                }
+                $scope.tree.addChildNode(newNode,node);
+            }
+            $scope.toggle = function(node) {
+                $scope.tree.toggle(node);
+            }
+        }
+    </script>
+</body>
+</html>
