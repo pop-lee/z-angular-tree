@@ -7,8 +7,8 @@ angular
     .constant('treeConfig', {
         templateUrl: 'zangular/template/zTreeTemplate.html'
     })
-    .directive('zTree', ['$compile','treeConfig',
-        function ($compile,treeConfig) {
+    .directive('zTree', ['$compile','$timeout','treeConfig',
+        function ($compile,$timeout,treeConfig) {
             return {
                 restrict: 'AE',
                 transclude: true,
@@ -32,16 +32,22 @@ angular
                     }
                     var template = $templateCache.get(treeConfig.templateUrl);
 
-                    //激活状态的节点,
-                    //当选中节点被父级折叠,则想上查找父级祖父级直到根节点第一个不是折叠状态的节点
-                    //当选中节点没有被折叠,则代表当前选中的节点
-                    $scope.activeNodeScope = null;
-                    $scope.$watch('activeNodeScope',function(newScope,oldScope) {
-                        if(oldScope) {
-                            oldScope.$model.$active = false;
+                    //包含了选中节点或者自己就是选中节点的节点
+                    $scope.hasSelectNodeScopeList = [];
+                    $scope.$watch('hasSelectNodeScopeList',function(newList,oldList) {
+                        var length;
+                        var i;
+                        if(oldList) {
+                            length = oldList.length;
+                            for(i=0;i<length;i++) {
+                                oldList[i].$model.$hasSelect = false;
+                            }
                         }
-                        if(newScope) {
-                            newScope.$model.$active = true;
+                        if(newList) {
+                            length = newList.length;
+                            for(i=0;i<length;i++) {
+                                newList[i].$model.$hasSelect = true;
+                            }
                         }
                     });
                     //当前选中的节点Scope
@@ -54,33 +60,27 @@ angular
                         }
                         if(newScope) {
                             newScope.$model.$selected = true;
+
+                            var hasSelectNodeScopeList = [];
+                            hasSelectNodeScopeList.push(newScope);
+                            eachParentScope(newScope,function(ns) {
+                                hasSelectNodeScopeList.push(ns);
+                            });
+                            $scope.hasSelectNodeScopeList = hasSelectNodeScopeList;
                         }
                     });
 
                     $scope.onClickHandle = function(event,node) {
                         var clickNodeScope = getScopeByNode(node);
-
-
                         if($scope.options.canMultiple) {//可多选
 
                         } else {//不可多选
                             if (isLeafNode(clickNodeScope)) {
-                                $scope.activeNodeScope = clickNodeScope;
                                 $scope.currentSelect = clickNodeScope.node;
                             } else {//如果不是叶子节点
                                 if (!$scope.options.leafNodeCanSelect) {//判断是否只有叶子节点才可以被选中
                                     $scope.currentSelect = clickNodeScope.node;
                                 }
-
-                                // //遍历子集,查找所有关闭的或者是叶子节点的节点,判断是否有激活节点,如果有,则将该节点激活;
-                                // eachAllChildScope(clickNodeScope, function (ns) {
-                                //     if (ns.$model.$collapsed || isLeafNode(ns)) {
-                                //         if (childHasActive(ns)) {
-                                //             $scope.activeNodeScope = ns;
-                                //             return "return";
-                                //         }
-                                //     }
-                                // });
                             }
                         }
                     }
@@ -101,6 +101,9 @@ angular
                                 } else {
                                     $scope.treeData.push(node);
                                 }
+                                $timeout(function() {
+                                    expandNode(getScopeByNode(node));
+                                })
                             }
                             tree.addAfterNode = function(newNode,targetNode) {
                                 var scope = getScopeByNode(targetNode);
@@ -108,18 +111,28 @@ angular
                                 var children = parentData[$scope.options.childrenField];
                                 children.splice($.inArray(targetNode, children)+1, 0,newNode);
                             }
-                            tree.delNode = function(node) {
+                            tree.delNode = function(node,index) {
                                 var scope = getScopeByNode(node);
                                 var parentData = scope.$parent.node;
                                 // if (parentData) {
                                     var children = parentData[$scope.options.childrenField];
-                                    children.splice($.inArray(node, children), 1);
+                                    var flag;
+                                    if(index) {
+                                        flag = index;
+                                    } else {
+                                        flag = $.inArray(node, children);
+                                    }
+                                    children.splice(flag, 1);
+                                    scope.$parent.$nodeChildren.splice(flag,1);
                                 // } else {
                                 //     scope.treeData.splice($.inArray(data, scope.treeData), 1);
                                 // }
 
-                                //TODO,将scope的存储销毁
-
+                                //此处不适用递归,引用去掉后让内存自动回收
+                                eachTreeScope(scope,function(ns) {
+                                    //在map中销毁所有已删除的节点
+                                    delete $scope.$nodeMap[ns.node.$$hashKey];
+                                });
                             }
                             tree.toggle = function(node) {
                                 var ns = getScopeByNode(node);
@@ -134,13 +147,13 @@ angular
                             }
                             tree.expandAll = function(node) {
                                 var nodeScope = getScopeByNode(node);
-                                eachAllChildScope(nodeScope, function (ns) {
+                                eachTreeScope(nodeScope, function (ns) {
                                     ns.$model.$collapsed = false;
                                 });
                             }
                             tree.collapseAll = function(node) {
                                 var nodeScope = getScopeByNode(node);
-                                eachAllChildScope(nodeScope, function (ns) {
+                                eachTreeScope(nodeScope, function (ns) {
                                     ns.$model.$collapsed = true;
                                 });
                             }
@@ -151,11 +164,12 @@ angular
                         if (node == null || node == undefined) {
                             return null;
                         }
-                        for(var field in $scope.$nodeMap) {
-                            if($scope.$nodeMap[field].node == node) {
-                                return $scope.$nodeMap[field];
-                            }
-                        }
+                        return $scope.$nodeMap[node.$$hashKey];
+                        // for(var field in $scope.$nodeMap) {
+                        //     if($scope.$nodeMap[field].node == node) {
+                        //         return $scope.$nodeMap[field];
+                        //     }
+                        // }
                         return null;
                     }
                     /**
@@ -174,8 +188,8 @@ angular
                             var ret = fn(parentScope.$nodeChildren[i]);
                             if (ret == "return") {
                                 return ret;
-                            } else if (ret == "break") {
-                                break;
+                            // } else if (ret == "break") {
+                            //     break;
                             // } else if (ret == "continue") {
                             //     continue;
                             }
@@ -196,24 +210,24 @@ angular
                             var ret = fn(nodeScope.$nodeChildren[i]);
                             if (ret == "return") {
                                 return ret;
-                            } else if (ret == "break") {
-                                break;
+                            // } else if (ret == "break") {
+                            //     break;
                             // } else if (ret == "continue") {
                             //     continue;
                             }
                         }
                     };
-                    /**
-                     * 递归遍历树所有子集节点
-                     * @param nodeScope 要遍历的树的根节点
-                     * @param fn
-                     */
-                    var eachAllChildScope = function (nodeScope, fn) {
-                        //递归
-                        return eachNextLevelScope(nodeScope, function (ns) {
-                            return eachTreeScope(ns, fn);
-                        })
-                    };
+                    // /**
+                    //  * 递归遍历树所有子集节点
+                    //  * @param nodeScope 要遍历的树的根节点
+                    //  * @param fn
+                    //  */
+                    // var eachAllChildScope = function (nodeScope, fn) {
+                    //     //
+                    //     return eachNextLevelScope(nodeScope, function (ns) {
+                    //         return eachTreeScope(ns, fn);
+                    //     })
+                    // };
                     /**
                      * 遍历包含自己的所有子节点
                      * @param nodeScope
@@ -222,10 +236,23 @@ angular
                      */
                     var eachTreeScope = function (nodeScope, fn) {
                         var ret = fn(nodeScope);
-                        if (ret == "return") {
+                        if (ret === "return") {
                             return ret;
                         } else {
-                            return eachAllChildScope(nodeScope, fn);
+                            return eachNextLevelScope(nodeScope, function (ns) {
+                                return eachTreeScope(ns, fn);
+                            });
+                        }
+                    }
+
+                    var eachParentScope = function(nodeScope,fn) {
+
+                        var parentScope = nodeScope.$parent;
+                        if(parentScope === $scope) {
+                            return;
+                        } else {
+                            fn(parentScope);
+                            eachParentScope(parentScope,fn);
                         }
                     }
                     /**
@@ -273,7 +300,7 @@ angular
                      */
                     var collapseNode = function (nodeScope) {
                         if (childHasActive(nodeScope)) {
-                            $scope.activeNodeScope = nodeScope;
+                            $scope.hasSelectNodeScope = nodeScope;
                         }
 
                         //叶子节点不进行关闭,非叶子节点,进行关闭
@@ -326,7 +353,7 @@ angular
     .directive("zTreeNode", function() {
         return {
             restrict: 'A',
-            scope:true,
+            scope:false,
             require: "^zTree",
             link: function( scope, element, attrs, ctrls) {
                 // Rendering template for the current node
@@ -345,7 +372,7 @@ angular
                     $nodeLevel:0,
                     // $nodeKey:null,
                     $collapsed:true,
-                    $active:false,
+                    $hasSelect:false,
                     $selected:false
                 };
 
@@ -361,7 +388,7 @@ angular
                 scope.$model = model;
                 scope.$nodeChildren = [];
                 //将scope加入整个树的map一维存储
-                scope.$treeRootScope.$nodeMap[scope.$id] = scope;
+                scope.$treeRootScope.$nodeMap[scope.node.$$hashKey] = scope;
                 //将scope存入父级的子节点集合数组
                 scope.$parent.$nodeChildren.push(scope);
 
