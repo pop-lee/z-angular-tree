@@ -76,3 +76,31 @@ $scope.tree.delNode(node)
     <button class="btn btn-xs btn-danger" ng-click="delNode(node)">del</button>
 </div>
 ```
+
+### 节点的子节点,可以放在任何想安放的位置 children node position
+```html
+<div z-tree="tree" tree-data="dataList">
+    <button>test</button>
+    <div z-tree-node ng-class="{'collapsed':$model.$collapsed}"></div>
+</div>
+```
+or
+```html
+<div z-tree="tree" tree-data="dataList">
+    <div z-tree-node ng-class="{'collapsed':$model.$collapsed}"></div>
+    <button>test</button>
+</div>
+```
+or
+```html
+<div z-tree="tree" tree-data="dataList">
+    <button>test</button>
+    <div>
+        <div>
+            <div>
+                <div z-tree-node ng-class="{'collapsed':$model.$collapsed}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+```
