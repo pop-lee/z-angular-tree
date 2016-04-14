@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>z-angular-tree by pop-lee</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>z-angular-tree</h1>
+        <h2>angular,tree,directive</h2>
+        <a href="https://github.com/pop-lee/z-angular-tree" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="z-angular-tree" class="anchor" href="#z-angular-tree" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Z-Angular-Tree</h1>
+
+<h2>
+<a id="-by-liyunpeng云鹏大连" class="anchor" href="#-by-liyunpeng%E4%BA%91%E9%B9%8F%E5%A4%A7%E8%BF%9E" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>　　　———— By LiYunpeng（云鹏@大连）</h2>
+
+<p>基于AngularJS1.2.x版本开发,JQuery1.x即可</p>
+
+<h2>
+<a id="目前为止实现的功能有-support-feature" class="anchor" href="#%E7%9B%AE%E5%89%8D%E4%B8%BA%E6%AD%A2%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%8A%9F%E8%83%BD%E6%9C%89-support-feature" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>目前为止实现的功能有 Support Feature</h2>
+
+<p>1.节点展开、关闭
+2.同级节点新增
+3.子集节点新增
+4.删除节点</p>
+
+<h2>
+<a id="栗子-example" class="anchor" href="#%E6%A0%97%E5%AD%90-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>栗子 <a href="http://pop-lee.github.io/z-angular-tree/example/index.html">example</a>
+</h2>
+
+<h2>
+<a id="开始-get-start" class="anchor" href="#%E5%BC%80%E5%A7%8B-get-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>开始 Get Start</h2>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+    <span class="pl-c">&lt;!-- node context 节点内容 --&gt;</span>
+    &lt;<span class="pl-ent">label</span>&gt;this is a node&lt;/<span class="pl-ent">label</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<h3>
+<a id="数据源-datasource" class="anchor" href="#%E6%95%B0%E6%8D%AE%E6%BA%90-datasource" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>数据源 dataSource</h3>
+
+<p>tree-data="dataList"
+其中dataList的结构如：</p>
+
+<div class="highlight highlight-source-json"><pre>[{
+    <span class="pl-s"><span class="pl-pds">"</span>label<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>: []
+ }, {
+    <span class="pl-s"><span class="pl-pds">"</span>label<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>: [{
+        <span class="pl-s"><span class="pl-pds">"</span>label<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>b1<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>: [{
+            <span class="pl-s"><span class="pl-pds">"</span>label<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>b1-1<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>: []
+        },{
+            <span class="pl-s"><span class="pl-pds">"</span>label<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>b1-2<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>children<span class="pl-pds">"</span></span>: []
+        }]
+    }]
+}]</pre></div>
+
+<h3>
+<a id="节点数据-node-data" class="anchor" href="#%E8%8A%82%E7%82%B9%E6%95%B0%E6%8D%AE-node-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>节点数据 node data</h3>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+    {{node.label}}
+    -- collapsed:"{{$model.$collapsed}}"
+    -- hasSelect:"{{$model.$hasSelect}}"
+    -- selected:"{{$model.$selected}}"
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<h3>
+<a id="控件引用-tree-reference" class="anchor" href="#%E6%8E%A7%E4%BB%B6%E5%BC%95%E7%94%A8-tree-reference" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>控件引用 tree reference</h3>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span>&gt;</pre></div>
+
+<p>$scope.tree 就是引用了树形控件的对象,可以进行如下调用</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">toggle</span>(node)
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSameLevelNode</span>(node)
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSubNode</span>(node)
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">delNode</span>(node)</pre></div>
+
+<h3>
+<a id="添加事件-event-handle" class="anchor" href="#%E6%B7%BB%E5%8A%A0%E4%BA%8B%E4%BB%B6-event-handle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>添加事件 event handle</h3>
+
+<p>相应事件卸载controller内即可</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">button</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>btn btn-xs btn btn-info<span class="pl-pds">"</span></span> <span class="pl-e">ng-click</span>=<span class="pl-s"><span class="pl-pds">"</span>toggle(node)<span class="pl-pds">"</span></span>&gt;toggle&lt;/<span class="pl-ent">button</span>&gt;
+    &lt;<span class="pl-ent">button</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>btn btn-xs btn-primary<span class="pl-pds">"</span></span> <span class="pl-e">ng-click</span>=<span class="pl-s"><span class="pl-pds">"</span>addSameLevelNode(node)<span class="pl-pds">"</span></span>&gt;add&lt;/<span class="pl-ent">button</span>&gt;
+    &lt;<span class="pl-ent">button</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>btn btn-xs btn-success<span class="pl-pds">"</span></span> <span class="pl-e">ng-click</span>=<span class="pl-s"><span class="pl-pds">"</span>addSubNode(node)<span class="pl-pds">"</span></span>&gt;add sub&lt;/<span class="pl-ent">button</span>&gt;
+    &lt;<span class="pl-ent">button</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>btn btn-xs btn-danger<span class="pl-pds">"</span></span> <span class="pl-e">ng-click</span>=<span class="pl-s"><span class="pl-pds">"</span>delNode(node)<span class="pl-pds">"</span></span>&gt;del&lt;/<span class="pl-ent">button</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<h3>
+<a id="节点的子节点可以放在任何想安放的位置-children-node-position" class="anchor" href="#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%AF%E4%BB%A5%E6%94%BE%E5%9C%A8%E4%BB%BB%E4%BD%95%E6%83%B3%E5%AE%89%E6%94%BE%E7%9A%84%E4%BD%8D%E7%BD%AE-children-node-position" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>节点的子节点,可以放在任何想安放的位置 children node position</h3>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">button</span>&gt;test&lt;/<span class="pl-ent">button</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node</span> <span class="pl-e">ng-class</span>=<span class="pl-s"><span class="pl-pds">"</span>{'collapsed':$model.$collapsed}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<p>or</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node</span> <span class="pl-e">ng-class</span>=<span class="pl-s"><span class="pl-pds">"</span>{'collapsed':$model.$collapsed}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+    &lt;<span class="pl-ent">button</span>&gt;test&lt;/<span class="pl-ent">button</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<p>or</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">button</span>&gt;test&lt;/<span class="pl-ent">button</span>&gt;
+    &lt;<span class="pl-ent">div</span>&gt;
+        &lt;<span class="pl-ent">div</span>&gt;
+            &lt;<span class="pl-ent">div</span>&gt;
+                &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node</span> <span class="pl-e">ng-class</span>=<span class="pl-s"><span class="pl-pds">"</span>{'collapsed':$model.$collapsed}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+            &lt;/<span class="pl-ent">div</span>&gt;
+        &lt;/<span class="pl-ent">div</span>&gt;
+    &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/pop-lee/z-angular-tree/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/pop-lee/z-angular-tree/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/pop-lee/z-angular-tree"></a> is maintained by <a href="https://github.com/pop-lee">pop-lee</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
