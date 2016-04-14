@@ -32,8 +32,7 @@ bower install z-angular-tree
 
 
 ### 数据源 dataSource
-tree-data="dataList"
-其中dataList的结构如：
+tree-data="dataList",其中dataList的结构如：
 ```json
 [{
     "label": "a",
@@ -54,8 +53,8 @@ tree-data="dataList"
 ```
 
 ### 节点数据 node data
-可通过node来进行访问传入的数据,
-还可访问节点的是否关闭状态,是否选中状态,是否在自己的子集包含选中节点,当前节点的层级数
+* 可通过node来进行访问传入的数据
+* 还可访问节点的是否关闭状态,是否选中状态,是否在自己的子集包含选中节点,当前节点的层级数
 ```html
 <div z-tree="tree" tree-data="dataList">
     {{node.label}}
