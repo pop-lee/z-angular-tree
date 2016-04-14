@@ -1,0 +1,1 @@
+angular.module("z.angular.tree").run(["$templateCache", function($templateCache) {$templateCache.put("zangular/template/zTreeTemplate.html","<ul class=\"nav\"><li ng-repeat=\"node in node[options.childrenField]\" class=\"z-tree-node\"><div z-tree-transclude=\"\"></div></li></ul>");}]);

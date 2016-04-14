@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.js"></script>
+    <script src="angular.1.2.29.js"></script>
+    <script src="bootstrap.3.1.1.js"></script>
+    <script src="highlight.pack.min.js"></script>
+    <script src="../dist/z-angular-tree.js"></script>
+    <link rel="stylesheet" href="bootstrap.3.1.1.css" />
+    <link rel="stylesheet" href="../dist/z-angular-tree.css" />
+    <style>
+        .tree-item.tree-item-has-select {
+            border-left-color: #428bca;
+        }
+        .tree-item.tree-item-selected {
+            border-left-color: #5cb85c !important;
+        }
+        .tree-item.tree-item-expanded {
+            border-left-color: #5bc0de;
+        }
+        .tree-item {
+            padding: 0px;
+            padding-left: 10px;
+            border: 1px solid #eee;
+            border-left-width: 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body ng-app="example">
+    <div ng-controller="testController" class="container">
+        <div class="row">
+            <pre class="col-md-12">
+                Some features are not yet supported,
+                default options:
+                <code class="json">
+                    options = {
+                        childrenField:"children",
+                        leafNodeCanSelect:true,
+                        useToggle:true
+                    }
+                </code>
+            </pre>
+            <div z-tree="tree" tree-data="planList" class="col-md-12">
+                <div class="tree-item"
+                     ng-class="{
+                         'tree-item-selected':$model.$selected,
+                         'tree-item-has-select':$model.$hasSelect,
+                         'tree-item-expanded':!$model.$collapsed
+                         }">
+                    <div>
+                        <button class="btn btn-xs btn btn-info" ng-click="toggle(node)">toggle</button>
+                        <button class="btn btn-xs btn-primary" ng-click="addSameLevelNode(node)">add</button>
+                        <button class="btn btn-xs btn-success" ng-click="addSubNode(node)">add sub</button>
+                        <button class="btn btn-xs btn-danger" ng-click="delNode(node)">del</button>
+                        <a href="javascript:void()" ng-click="toggle(node);selectNode($event,node)">
+                            {{node.label}}
+                            -- collapsed:"{{$model.$collapsed}}"
+                            -- hasSelect:"{{$model.$hasSelect}}"
+                            -- selected:"{{$model.$selected}}"
+                        </a>
+                    </div>
+                    <div z-tree-node ng-class="{'collapsed':$model.$collapsed}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        angular.module("example",['z.angular.tree'])
+        .controller('testController',['$scope',function($scope) {
+            $scope.planList =
+                    [{
+                        "label": "a",
+                        "children": []
+                    }, {
+                        "label": "b",
+                        "children": [{
+                            "label": "b1",
+                            "children": [{
+                                "label": "b1-1",
+                                "children": []
+                            },{
+                                "label": "b1-2",
+                                "children": []
+                            }]
+                        }]
+                    }]
+            ;
+
+
+
+            // 引用树形对象,用来操作树
+            $scope.tree = {};
+            $scope.delNode = function(node) {
+                $scope.tree.delNode(node);
+            }
+            $scope.addSameLevelNode = function(node) {
+                var newNode = {
+                    "label": "new",
+                    "children": []
+                }
+                $scope.tree.addAfterNode(newNode,node);
+            }
+            $scope.addSubNode = function(node) {
+                var newNode = {
+                    "label": "new",
+                    "children": []
+                }
+                $scope.tree.addChildNode(newNode,node);
+            }
+            $scope.toggle = function(node) {
+                $scope.tree.toggle(node);
+            }
+            $scope.selectNode = function(event,node) {
+                $scope.tree.selectNode(node);
+            }
+        }]);
+
+        $(document).ready(function() {
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+</body>
+</html>
