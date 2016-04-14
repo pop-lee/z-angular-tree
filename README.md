@@ -112,3 +112,6 @@ or
     </div>
 </div>
 ```
+
+## 开源许可协议 License
+[The Apache License](https://github.com/pop-lee/z-angular-tree/blob/master/LICENSE)
