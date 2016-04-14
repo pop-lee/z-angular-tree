@@ -1,6 +1,8 @@
 # Z-Angular-Tree
 ##　　　———— By LiYunpeng（云鹏@大连）
 
+基于AngularJS1.2.x版本开发,JQuery1.x即可
+
 ## 目前为止实现的功能有 Support Feature
 1.节点展开、关闭
 2.同级节点新增
