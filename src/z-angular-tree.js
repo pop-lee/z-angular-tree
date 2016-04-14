@@ -16,8 +16,8 @@ angular
                     zTree:'=?',
                     treeData: '=',
                     currentSelect: '=?',
-                    options: '=?',
-                    onAfterRender: '&'
+                    options: '=?'
+                    // onAfterRender: '&'
                 },
                 transclude:true,
                 controller: ['$scope', function( $scope ) {
@@ -72,7 +72,9 @@ angular
                     $scope.node[$scope.options.childrenField] = $scope.treeData;
 
                     this.$treeRootScope = $scope;
-                    this.onClickHandle = function(event,node) {
+
+                    $scope.zTree = {}
+                    $scope.zTree.selectNode = function(node) {
                         var clickNodeScope = getScopeByNode(node);
                         if($scope.options.canMultiple) {//可多选
 
@@ -85,73 +87,71 @@ angular
                                 }
                             }
                         }
-                    }
-
-                    var tree = $scope.zTree;
-                    if (tree != null) {
-                        if (angular.isObject(tree)) {
-                            tree.addChildNode = function(node,parentNode) {
-                                if (parentNode != null) {
-                                    var children = parentNode[$scope.options.childrenField];
-                                    if (children != null && children != undefined) {
-                                        children.push(node);
-                                    }
-                                } else {
-                                    $scope.treeData.push(node);
-                                }
-                                $timeout(function() {
-                                    expandNode(getScopeByNode(node));
-                                })
+                    };
+                    $scope.zTree.addChildNode = function(node,parentNode) {
+                        if (parentNode != null) {
+                            var children = parentNode[$scope.options.childrenField];
+                            if (children != null && children != undefined) {
+                                children.push(node);
                             }
-                            tree.addAfterNode = function(newNode,targetNode) {
-                                var scope = getScopeByNode(targetNode);
-                                var parentData = scope.$parentNodeScope.node;
-                                var children = parentData[$scope.options.childrenField];
-                                children.splice($.inArray(targetNode, children)+1, 0,newNode);
-                            }
-                            tree.delNode = function(node,index) {
-                                var scope = getScopeByNode(node);
-                                var parentData = scope.$parentNodeScope.node;
-                                var children = parentData[$scope.options.childrenField];
-                                var flag;
-                                if(index) {
-                                    flag = index;
-                                } else {
-                                    flag = $.inArray(node, children);
-                                }
-                                children.splice(flag, 1);
-                                scope.$parentNodeScope.$nodeChildren.splice(flag,1);
-
-                                //此处不适用递归,引用去掉后让内存自动回收
-                                eachTreeScope(scope,function(ns) {
-                                    //在map中销毁所有已删除的节点
-                                    delete $scope.$nodeMap[ns.node.$$hashKey];
-                                });
-                            }
-                            tree.toggle = function(node) {
-                                var ns = getScopeByNode(node);
-                                if (!ns) {
-                                    return;
-                                }
-                                if (ns.$model.$collapsed) {//如果进行展开的操作
-                                    expandNode(ns);
-                                } else {//如果进行关闭
-                                    collapseNode(ns);
-                                }
-                            }
-                            tree.expandAll = function(node) {
-                                var nodeScope = getScopeByNode(node);
-                                eachTreeScope(nodeScope, function (ns) {
-                                    ns.$model.$collapsed = false;
-                                });
-                            }
-                            tree.collapseAll = function(node) {
-                                var nodeScope = getScopeByNode(node);
-                                eachTreeScope(nodeScope, function (ns) {
-                                    ns.$model.$collapsed = true;
-                                });
-                            }
+                        } else {
+                            $scope.treeData.push(node);
                         }
+                        $timeout(function() {
+                            expandNode(getScopeByNode(node));
+                        })
+                    }
+                    $scope.zTree.addAfterNode = function(newNode,targetNode) {
+                        var scope = getScopeByNode(targetNode);
+                        var parentData = scope.$parentNodeScope.node;
+                        var children = parentData[$scope.options.childrenField];
+                        children.splice($.inArray(targetNode, children)+1, 0,newNode);
+                    }
+                    $scope.zTree.delNode = function(node,index) {
+                        var scope = getScopeByNode(node);
+                        var parentData = scope.$parentNodeScope.node;
+                        var children = parentData[$scope.options.childrenField];
+                        var flag;
+                        if(index) {
+                            flag = index;
+                        } else {
+                            flag = $.inArray(node, children);
+                        }
+                        children.splice(flag, 1);
+                        scope.$parentNodeScope.$nodeChildren.splice(flag,1);
+
+                        //此处不适用递归,引用去掉后让内存自动回收
+                        eachTreeScope(scope,function(ns) {
+                            //在map中销毁所有已删除的节点
+                            delete $scope.$nodeMap[ns.node.$$hashKey];
+                        });
+                    }
+                    $scope.zTree.toggle = function(node) {
+                        var ns = getScopeByNode(node);
+                        if (!ns) {
+                            return;
+                        }
+                        if (ns.$model.$collapsed) {//如果进行展开的操作
+                            expandNode(ns);
+                        } else {//如果进行关闭
+                            collapseNode(ns);
+                        }
+                    }
+                    if($scope.options.canMultiple) {
+                        $scope.zTree.expandAll = function(node) {
+                            var nodeScope = getScopeByNode(node);
+                            eachTreeScope(nodeScope, function (ns) {
+                                ns.$model.$collapsed = false;
+                            });
+                        }
+                        $scope.zTree.collapseAll = function(node) {
+                            var nodeScope = getScopeByNode(node);
+                            eachTreeScope(nodeScope, function (ns) {
+                                ns.$model.$collapsed = true;
+                            });
+                        }
+                    } else {
+
                     }
 
                     var getScopeByNode = function(node) {
@@ -273,10 +273,7 @@ angular
                             $scope.hasSelectNodeScope = nodeScope;
                         }
 
-                        //叶子节点不进行关闭,非叶子节点,进行关闭
-                        if (!isLeafNode(nodeScope) || nodeScope != getScopeByNode($scope.currentSelect)) {
-                            nodeScope.$model.$collapsed = true;
-                        }
+                        nodeScope.$model.$collapsed = true;
                     };
                     /**
                      * 展开节点
@@ -300,7 +297,11 @@ angular
                         if (nodeScope.$parentNodeScope.$model) {
                             expandNode(nodeScope.$parentNodeScope);
                         }
-                        nodeScope.$model.$collapsed = false;
+
+                        //叶子节点不进行关闭,非叶子节点,进行关闭
+                        if (!isLeafNode(nodeScope)) {
+                            nodeScope.$model.$collapsed = false;
+                        }
                     };
 
                 }],
@@ -328,20 +329,22 @@ angular
             }
         };
     }])
-    .directive("zTreeSelectZone", function() {
-        return {
-            restrict: 'AE',
-            scope: true,
-            require: "^zTree",
-            link: function( scope, element, attrs, ctrls) {
-                element.on('click',function(event) {
-                    scope.$apply(function() {
-                        ctrls.onClickHandle(event,scope.node);
-                    });
-                });
-            }
-        };
-    })
+    // .directive("zTreeSelectZone", function() {
+    //     return {
+    //         restrict: 'AE',
+    //         scope: true,
+    //         require: "^zTree",
+    //         link: function( scope, element, attrs, ctrls) {
+    //             element.on('click',function(event) {
+    //                 scope.$apply(function() {
+    //                     ctrls.$treeRootScope.zTree.selectNode(scope.node);
+    //                 });
+    //                 //阻止事件继续向上冒泡
+    //                 event.stopPropagation();
+    //             });
+    //         }
+    //     };
+    // })
     .directive("zTreeTransclude", function() {//为了让递归的指令都共用rootParentScope
         return {
             require: "^zTree",
