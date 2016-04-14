@@ -10,6 +10,8 @@
 3. 子集节点新增
 4. 删除节点
 
+后续会陆续加入缓动效果和拖拽功能
+
 ## 安装 install
 ```
 bower install z-angular-tree
@@ -52,12 +54,15 @@ tree-data="dataList"
 ```
 
 ### 节点数据 node data
+可通过node来进行访问传入的数据,
+还可访问节点的是否关闭状态,是否选中状态,是否在自己的子集包含选中节点,当前节点的层级数
 ```html
 <div z-tree="tree" tree-data="dataList">
     {{node.label}}
     -- collapsed:"{{$model.$collapsed}}"
     -- hasSelect:"{{$model.$hasSelect}}"
     -- selected:"{{$model.$selected}}"
+    -- nodeLevel:"{{$model.$nodeLevel}}"
 </div>
 ```
 
