@@ -4,10 +4,10 @@
 基于AngularJS1.2.x版本开发,JQuery1.x即可
 
 ## 目前为止实现的功能有 Support Feature
-1.节点展开、关闭
-2.同级节点新增
-3.子集节点新增
-4.删除节点
+1. 节点展开、关闭
+2. 同级节点新增
+3. 子集节点新增
+4. 删除节点
 
 ## 栗子 [example](http://pop-lee.github.io/z-angular-tree/example/index.html)
 
