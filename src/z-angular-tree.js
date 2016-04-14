@@ -36,14 +36,12 @@ angular
                     $scope.$watch('hasSelectNodeScopeList',function(newList,oldList) {
                         var i,length;
                         if(oldList) {
-                            length = oldList.length;
-                            for(i=0;i<length;i++) {
+                            for(i=0;i<oldList.length;i++) {
                                 oldList[i].$model.$hasSelect = false;
                             }
                         }
                         if(newList) {
-                            length = newList.length;
-                            for(i=0;i<length;i++) {
+                            for(i=0;i<newList.length;i++) {
                                 newList[i].$model.$hasSelect = true;
                             }
                         }
@@ -137,7 +135,8 @@ angular
                             collapseNode(ns);
                         }
                     }
-                    if($scope.options.canMultiple) {
+                    if($scope.options.useToggle) {
+                    } else {//如果使用互斥,则不允许展开和关闭全部
                         $scope.zTree.expandAll = function(node) {
                             var nodeScope = getScopeByNode(node);
                             eachTreeScope(nodeScope, function (ns) {
@@ -150,8 +149,6 @@ angular
                                 ns.$model.$collapsed = true;
                             });
                         }
-                    } else {
-
                     }
 
                     var getScopeByNode = function(node) {
@@ -358,8 +355,6 @@ angular
                 scope.transcludeScope.node = scope.node;
                 scope.transcludeScope.options = rootScope.options;
                 scope.transcludeScope.$model = {
-                    $nodeLevel:0,
-                    // $nodeKey:null,
                     $collapsed:true,
                     $hasSelect:false,
                     $selected:false,
@@ -372,7 +367,7 @@ angular
                     scope.transcludeScope.$destroy();
                 });
 
-                //将scope加入整个树的map一维存储
+                //将scope加入整个树的map一维存储,以方便快速查找
                 rootScope.$nodeMap[scope.node.$$hashKey] = scope.transcludeScope;
                 rootScope.transclude(scope.transcludeScope, function(clone) {
                     element.html('').append(clone);
