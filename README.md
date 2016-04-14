@@ -3,16 +3,24 @@
 
 基于AngularJS1.2.x版本开发,JQuery1.x即可
 
+
 ## 目前为止实现的功能有 Support Feature
 1. 节点展开、关闭
 2. 同级节点新增
 3. 子集节点新增
 4. 删除节点
 
+## 安装 install
+```
+bower install z-angular-tree
+```
+
 ## 栗子 [example](http://pop-lee.github.io/z-angular-tree/example/index.html)
+例子可直接下载运行,无需构建,也可使用gulp进行构建运行
 
 
 ## 开始 Get Start
+
 ```html
 <div z-tree="tree" tree-data="dataList">
     <!-- node context 节点内容 -->
