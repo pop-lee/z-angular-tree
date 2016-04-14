@@ -46,6 +46,8 @@
 <li>删除节点</li>
 </ol>
 
+<p>后续会陆续加入缓动效果和拖拽功能</p>
+
 <h2>
 <a id="安装-install" class="anchor" href="#%E5%AE%89%E8%A3%85-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装 install</h2>
 
@@ -92,11 +94,17 @@
 <h3>
 <a id="节点数据-node-data" class="anchor" href="#%E8%8A%82%E7%82%B9%E6%95%B0%E6%8D%AE-node-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>节点数据 node data</h3>
 
+<ul>
+<li>可通过node来进行访问传入的数据,</li>
+<li>还可访问节点的是否关闭状态,是否选中状态,是否在自己的子集包含选中节点,当前节点的层级数</li>
+</ul>
+
 <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
     {{node.label}}
     -- collapsed:"{{$model.$collapsed}}"
     -- hasSelect:"{{$model.$hasSelect}}"
     -- selected:"{{$model.$selected}}"
+    -- nodeLevel:"{{$model.$nodeLevel}}"
 &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
 
 <h3>
