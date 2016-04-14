@@ -6,6 +6,7 @@
     <script src="jquery.js"></script>
     <script src="angular.1.2.29.js"></script>
     <script src="bootstrap.3.1.1.js"></script>
+    <script src="highlight.pack.min.js"></script>
     <script src="../dist/z-angular-tree.js"></script>
     <link rel="stylesheet" href="bootstrap.3.1.1.css" />
     <link rel="stylesheet" href="../dist/z-angular-tree.css" />
@@ -20,7 +21,7 @@
             border-left-color: #5bc0de;
         }
         .tree-item {
-            padding: 20px;
+            padding: 0px;
             padding-left: 10px;
             border: 1px solid #eee;
             border-left-width: 5px;
@@ -31,9 +32,19 @@
 <body ng-app="example">
     <div ng-controller="testController" class="container">
         <div class="row">
+            <pre class="col-md-12">
+                Some features are not yet supported,
+                default options:
+                <code class="json">
+                    options = {
+                        childrenField:"children",
+                        leafNodeCanSelect:true,
+                        useToggle:true
+                    }
+                </code>
+            </pre>
             <div z-tree="tree" tree-data="planList" class="col-md-12">
-                <div
-                     class="tree-item"
+                <div class="tree-item"
                      ng-class="{
                          'tree-item-selected':$model.$selected,
                          'tree-item-has-select':$model.$hasSelect,
@@ -44,24 +55,21 @@
                         <button class="btn btn-xs btn-primary" ng-click="addSameLevelNode(node)">add</button>
                         <button class="btn btn-xs btn-success" ng-click="addSubNode(node)">add sub</button>
                         <button class="btn btn-xs btn-danger" ng-click="delNode(node)">del</button>
-                    </div>
-                    <div z-tree-select-zone>
-                        <p>
+                        <a  href="#" ng-click="toggle(node);selectNode($event,node)">
                             {{node.label}}
                             -- collapsed:"{{$model.$collapsed}}"
                             -- hasSelect:"{{$model.$hasSelect}}"
                             -- selected:"{{$model.$selected}}"
-                        </p>
+                        </a>
                     </div>
-                    {{node.label}}
                     <div z-tree-node ng-class="{'collapsed':$model.$collapsed}"></div>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        var example = angular.module("example",['z.angular.tree']);
-        var testController = function($scope) {
+        angular.module("example",['z.angular.tree'])
+        .controller('testController',['$scope',function($scope) {
             $scope.planList =
                     [{
                         "label": "a",
@@ -105,7 +113,16 @@
             $scope.toggle = function(node) {
                 $scope.tree.toggle(node);
             }
-        }
+            $scope.selectNode = function(event,node) {
+                $scope.tree.selectNode(node);
+            }
+        }]);
+
+        $(document).ready(function() {
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
     </script>
 </body>
 </html>
