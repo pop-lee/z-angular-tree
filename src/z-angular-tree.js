@@ -25,17 +25,22 @@ angular
                     $scope.$nodeMap = {};
                     $scope.$keyCount = 0;//用来生成一个全局的ID生成计数标记
 
+                    if(!($scope.currentSelect instanceof Array)) {
+                        $scope.currentSelect = [];
+                    }
+                    $scope.$oldCurrentSelect = [];
+
                     $scope.options = angular.extend({
                             childrenField:"children",
                             leafNodeCanSelect:true,
-                            canMultiple:false,
-                            useToggle:true
+                            canMultiple:true,
+                            useToggle:false
                         },$scope.options);
 
                     //包含了选中节点或者自己就是选中节点的节点
                     $scope.hasSelectNodeScopeList = [];
-                    $scope.$watch('hasSelectNodeScopeList',function(newList,oldList) {
-                        var i,length;
+                    $scope.$watchCollection('hasSelectNodeScopeList',function(newList,oldList) {
+                        var i;
                         if(oldList) {
                             for(i=0;i<oldList.length;i++) {
                                 oldList[i].$model.$hasSelect = false;
@@ -48,24 +53,33 @@ angular
                         }
                     });
                     //当前选中的节点Scope
-                    $scope.$watch('currentSelect',function(newNode,oldNode) {
-                        var newScope = getScopeByNode(newNode);
-                        var oldScope = getScopeByNode(oldNode);
+                    $scope.$watchCollection('currentSelect',function(newSelect) {
+                        var i;
+                        var oldSelect = $scope.$oldCurrentSelect;
+                        //将原有选中的所有改为不选中
+                        for(i=0;i<oldSelect.length;i++) {
+                            var oldScope = getScopeByNode(oldSelect[i]);
 
-                        if(oldScope) {
-                            oldScope.$model.$selected = false;
+                            if(oldScope) {
+                                oldScope.$model.$selected = false;
+                            }
                         }
-                        if(newScope) {
-                            newScope.$model.$selected = true;
+                        var hasSelectNodeScopeList = [];
+                        //将新的选中列表的所有改为选中
+                        for(i=0;i<newSelect.length;i++) {
+                            var newScope = getScopeByNode(newSelect[i]);
+                            if(newScope) {
+                                newScope.$model.$selected = true;
 
-                            var hasSelectNodeScopeList = [];
-                            hasSelectNodeScopeList.push(newScope);
-                            eachParentScope(newScope,function(ns) {
-                                hasSelectNodeScopeList.push(ns);
-                            });
-                            $scope.hasSelectNodeScopeList = hasSelectNodeScopeList;
+                                hasSelectNodeScopeList.push(newScope);
+                                eachParentScope(newScope,function(ns) {
+                                    hasSelectNodeScopeList.push(ns);
+                                });
+                            }
                         }
-                    });
+                        $scope.hasSelectNodeScopeList = hasSelectNodeScopeList;
+                        $scope.$oldCurrentSelect = [].concat(newSelect);//不使用watch的oldValue,因为watch自带的oldValue是通过Copy出来的,非地址引用
+                    },true);
 
                     $scope.node = {};
                     $scope.node[$scope.options.childrenField] = $scope.treeData;
@@ -75,16 +89,13 @@ angular
                     $scope.zTree = {}
                     $scope.zTree.selectNode = function(node) {
                         var clickNodeScope = getScopeByNode(node);
-                        if($scope.options.canMultiple) {//可多选
 
-                        } else {//不可多选
-                            if (isLeafNode(clickNodeScope)) {
-                                $scope.currentSelect = clickNodeScope.node;
-                            } else {//如果不是叶子节点
-                                if (!$scope.options.leafNodeCanSelect) {//判断是否只有叶子节点才可以被选中
-                                    $scope.currentSelect = clickNodeScope.node;
-                                }
+                        if($scope.options.leafNodeCanSelect) {
+                            if(isLeafNode(clickNodeScope)) {
+                                currentSelect(node);
                             }
+                        } else {
+                            currentSelect(node);
                         }
                     };
                     $scope.zTree.addChildNode = function(node,parentNode) {
@@ -149,6 +160,19 @@ angular
                             eachTreeScope(nodeScope, function (ns) {
                                 ns.$model.$collapsed = true;
                             });
+                        }
+                    }
+
+                    var currentSelect = function(node) {
+                        if(!getScopeByNode(node)) {
+                            return;
+                        }
+
+                        var index = $.inArray(node,$scope.currentSelect);
+                        if(index>=0) {
+                            $scope.currentSelect.splice(index,1);
+                        } else {
+                            $scope.currentSelect.push(node);
                         }
                     }
 
@@ -254,27 +278,12 @@ angular
                     var isLeafNode = function (nodeScope) {
                         return nodeScope.$nodeChildren.length === 0;
                     };
-                    /**
-                     * 查找自己或者子节点是否有当前选择的节点
-                     * @param nodeScope
-                     * @returns {boolean}
-                     */
-                    var childHasActive = function (nodeScope) {
-                        if (findScope(getScopeByNode($scope.currentSelect), nodeScope) != undefined) {
-                            return true;
-                        }
-                        return false;
-                    };
 
                     /**
                      * 关闭节点
                      * @param nodeScope
                      */
                     var collapseNode = function (nodeScope) {
-                        if (childHasActive(nodeScope)) {
-                            $scope.hasSelectNodeScope = nodeScope;
-                        }
-
                         nodeScope.$model.$collapsed = true;
                     };
                     /**
@@ -369,14 +378,13 @@ angular
 
                 //将scope存入父级的子节点集合数组
                 scope.transcludeScope.$parentNodeScope.$nodeChildren.push(scope.transcludeScope);
-                scope.$on('$destroy', function() {
-                    scope.transcludeScope.$destroy();
-                });
-
                 //将scope加入整个树的map一维存储,以方便快速查找
                 rootScope.$nodeMap[scope.transcludeScope.$nodeKey] = scope.transcludeScope;
                 rootScope.transclude(scope.transcludeScope, function(clone) {
                     element.html('').append(clone);
+                });
+                scope.$on('$destroy', function() {
+                    scope.transcludeScope.$destroy();
                 });
             }
         };
