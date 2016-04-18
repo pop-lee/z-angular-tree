@@ -36,6 +36,8 @@
 
 <p>基于AngularJS1.2.x版本开发,JQuery1.x即可</p>
 
+<p><code>如果您觉得好用,麻烦给加颗星!!谢谢支持!</code></p>
+
 <h2>
 <a id="目前为止实现的功能有-support-feature" class="anchor" href="#%E7%9B%AE%E5%89%8D%E4%B8%BA%E6%AD%A2%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%8A%9F%E8%83%BD%E6%9C%89-support-feature" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>目前为止实现的功能有 Support Feature</h2>
 
@@ -45,6 +47,15 @@
 <li>子集节点新增</li>
 <li>删除节点</li>
 </ol>
+
+<p>还可配置</p>
+
+<ul>
+<li>数据源中子节点的字段名称</li>
+<li>是否只有叶子节点才可选中</li>
+<li>是否使用节点互斥</li>
+<li>是否允许多选</li>
+</ul>
 
 <p>后续会陆续加入缓动效果和拖拽功能</p>
 
@@ -71,8 +82,7 @@
 <h3>
 <a id="数据源-datasource" class="anchor" href="#%E6%95%B0%E6%8D%AE%E6%BA%90-datasource" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>数据源 dataSource</h3>
 
-<p>tree-data="dataList"
-其中dataList的结构如：</p>
+<p>tree-data="dataList",其中dataList的结构如：</p>
 
 <div class="highlight highlight-source-json"><pre>[{
     <span class="pl-s"><span class="pl-pds">"</span>label<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>,
@@ -95,7 +105,7 @@
 <a id="节点数据-node-data" class="anchor" href="#%E8%8A%82%E7%82%B9%E6%95%B0%E6%8D%AE-node-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>节点数据 node data</h3>
 
 <ul>
-<li>可通过node来进行访问传入的数据,</li>
+<li>可通过node来进行访问传入的数据</li>
 <li>还可访问节点的是否关闭状态,是否选中状态,是否在自己的子集包含选中节点,当前节点的层级数</li>
 </ul>
 
