@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>z-angular-tree</title>
     <script src="jquery.js"></script>
     <script src="angular.1.2.29.js"></script>
     <script src="bootstrap.3.1.1.js"></script>
@@ -38,8 +38,7 @@
                 <code class="json">
                     options = {
                         childrenField:"children",
-                        leafNodeCanSelect:true,
-                        useToggle:true
+                        useToggle:false
                     }
                 </code>
             </pre>
@@ -55,7 +54,7 @@
                         <button class="btn btn-xs btn-primary" ng-click="addSameLevelNode(node)">add</button>
                         <button class="btn btn-xs btn-success" ng-click="addSubNode(node)">add sub</button>
                         <button class="btn btn-xs btn-danger" ng-click="delNode(node)">del</button>
-                        <a href="javascript:void()" ng-click="toggle(node);selectNode($event,node)">
+                        <a href="javascript:void(0)" ng-click="toggle(node);selectNode($event,node)">
                             {{node.label}}
                             -- collapsed:"{{$model.$collapsed}}"
                             -- hasSelect:"{{$model.$hasSelect}}"
