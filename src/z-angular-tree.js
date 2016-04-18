@@ -23,6 +23,7 @@ angular
                 controller: ['$scope', function( $scope ) {
                     $scope.$nodeChildren = [];
                     $scope.$nodeMap = {};
+                    $scope.$keyCount = 0;//用来生成一个全局的ID生成计数标记
 
                     $scope.options = angular.extend({
                             childrenField:"children",
@@ -121,7 +122,7 @@ angular
                         //此处不适用递归,引用去掉后让内存自动回收
                         eachTreeScope(scope,function(ns) {
                             //在map中销毁所有已删除的节点
-                            delete $scope.$nodeMap[ns.node.$$hashKey];
+                            delete $scope.$nodeMap[ns.$nodeKey];
                         });
                     }
                     $scope.zTree.toggle = function(node) {
@@ -155,7 +156,11 @@ angular
                         if (node === null || node === undefined) {
                             return null;
                         }
-                        return $scope.$nodeMap[node.$$hashKey];
+                        for(var key in $scope.$nodeMap) {
+                            if($scope.$nodeMap[key].node == node) {
+                                return $scope.$nodeMap[key];
+                            }
+                        }
                         return null;
                     }
                     /**
@@ -354,6 +359,7 @@ angular
                 scope.transcludeScope.$parentNodeScope = scope.$parent.$parent;
                 scope.transcludeScope.node = scope.node;
                 scope.transcludeScope.options = rootScope.options;
+                scope.transcludeScope.$nodeKey = ++rootScope.$keyCount;
                 scope.transcludeScope.$model = {
                     $collapsed:true,
                     $hasSelect:false,
@@ -368,7 +374,7 @@ angular
                 });
 
                 //将scope加入整个树的map一维存储,以方便快速查找
-                rootScope.$nodeMap[scope.node.$$hashKey] = scope.transcludeScope;
+                rootScope.$nodeMap[scope.transcludeScope.$nodeKey] = scope.transcludeScope;
                 rootScope.transclude(scope.transcludeScope, function(clone) {
                     element.html('').append(clone);
                 });
