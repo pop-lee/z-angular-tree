@@ -108,6 +108,7 @@ angular
                             $scope.treeData.push(node);
                         }
                         $timeout(function() {
+                            refreshModel(getScopeByNode(parentNode));
                             expandNode(getScopeByNode(node));
                         })
                     }
@@ -116,6 +117,9 @@ angular
                         var parentData = scope.$parentNodeScope.node;
                         var children = parentData[$scope.options.childrenField];
                         children.splice($.inArray(targetNode, children)+1, 0,newNode);
+                        $timeout(function() {
+                            refreshModel(scope.$parentNodeScope);
+                        });
                     }
                     $scope.zTree.delNode = function(node,index) {
                         var scope = getScopeByNode(node);
@@ -134,6 +138,9 @@ angular
                         eachTreeScope(scope,function(ns) {
                             //在map中销毁所有已删除的节点
                             delete $scope.$nodeMap[ns.$nodeKey];
+                        });
+                        $timeout(function() {
+                            refreshModel(scope.$parentNodeScope);
                         });
                     }
                     $scope.zTree.toggle = function(node) {
@@ -314,6 +321,16 @@ angular
                             nodeScope.$model.$collapsed = false;
                         }
                     };
+                    var refreshModel = function(nodeScope) {
+                        var arr = nodeScope.$nodeChildren;
+                        for(var i=0;i<arr.length;i++) {
+                            var ns = arr[i];
+                            ns.$model.$index = ns.$internalScope.$index;
+                            ns.$model.$isFirst = ns.$internalScope.$first;
+                            ns.$model.$isLast = ns.$internalScope.$last;
+                            ns.$model.$isMiddle = ns.$internalScope.$middle;
+                        }
+                    }
 
                 }],
                 compile: function(element, attrs, transclude) {
@@ -366,16 +383,20 @@ angular
                 scope.transcludeScope = rootScope.$parent.$new();
                 scope.transcludeScope.$nodeChildren = [];
                 scope.transcludeScope.$parentNodeScope = scope.$parent.$parent;
+                scope.transcludeScope.$internalScope = scope;
                 scope.transcludeScope.node = scope.node;
                 scope.transcludeScope.options = rootScope.options;
                 scope.transcludeScope.$nodeKey = ++rootScope.$keyCount;
                 scope.transcludeScope.$model = {
+                    $index:scope.$index,
+                    $isFirst:scope.$first,
+                    $isLast:scope.$last,
+                    $isMiddle:scope.$middle,
                     $collapsed:true,
                     $hasSelect:false,
                     $selected:false,
                     $nodeLevel:scope.$parent.$parent.$model?scope.$parent.$model.$nodeLevel+1:1//如果有$model则代表不是根节点
                 };
-
                 //将scope存入父级的子节点集合数组
                 scope.transcludeScope.$parentNodeScope.$nodeChildren.push(scope.transcludeScope);
                 //将scope加入整个树的map一维存储,以方便快速查找

@@ -8,7 +8,7 @@
     "./dist/z-angular-tree.js"
   ],
   "ignore": [
-    "gulp.js",
+    "gulpfile.js",
     "package.json"
   ],
   "dependencies": {
