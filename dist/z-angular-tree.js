@@ -325,10 +325,10 @@ angular
                         var arr = nodeScope.$nodeChildren;
                         for(var i=0;i<arr.length;i++) {
                             var ns = arr[i];
-                            ns.$model.$index = ns.$internalScope.$index;
-                            ns.$model.$isFirst = ns.$internalScope.$first;
-                            ns.$model.$isLast = ns.$internalScope.$last;
-                            ns.$model.$isMiddle = ns.$internalScope.$middle;
+                            ns.$model.$index = ns.$internalScope.$index;//i;
+                            ns.$model.$isFirst = ns.$internalScope.$first;//i===0;
+                            ns.$model.$isLast = ns.$internalScope.$last;//i===arr.length-1;
+                            ns.$model.$isMiddle = ns.$internalScope.$middle;//!(ns.$model.$isFirst||ns.$model.$isLast);
                         }
                     }
 
@@ -398,7 +398,8 @@ angular
                     $nodeLevel:scope.$parent.$parent.$model?scope.$parent.$model.$nodeLevel+1:1//如果有$model则代表不是根节点
                 };
                 //将scope存入父级的子节点集合数组
-                scope.transcludeScope.$parentNodeScope.$nodeChildren.push(scope.transcludeScope);
+                var index = $.inArray(scope.transcludeScope.node,scope.transcludeScope.$parentNodeScope.node[rootScope.options.childrenField]);
+                scope.transcludeScope.$parentNodeScope.$nodeChildren.splice(index,0,scope.transcludeScope);
                 //将scope加入整个树的map一维存储,以方便快速查找
                 rootScope.$nodeMap[scope.transcludeScope.$nodeKey] = scope.transcludeScope;
                 rootScope.transclude(scope.transcludeScope, function(clone) {
