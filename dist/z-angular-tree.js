@@ -39,6 +39,17 @@ angular
 
                     //包含了选中节点或者自己就是选中节点的节点
                     $scope.hasSelectNodeScopeList = [];
+
+                    $scope.node = {};
+                    $scope.$watch('treeData',function(newValue) {
+                        $scope.node[$scope.options.childrenField] = newValue;
+                        eachNodeData($scope.node,function(node) {
+                            if(!node.$$_key) {
+                                node.$$_key = ++$scope.$keyCount;
+                            }
+                        });
+                    },true);
+
                     $scope.$watchCollection('hasSelectNodeScopeList',function(newList,oldList) {
                         var i;
                         if(oldList) {
@@ -81,11 +92,6 @@ angular
                         $scope.$oldCurrentSelect = [].concat(newSelect);//不使用watch的oldValue,因为watch自带的oldValue是通过Copy出来的,非地址引用
                     },true);
 
-                    $scope.node = {};
-                    $scope.node[$scope.options.childrenField] = $scope.treeData;
-
-                    this.$treeRootScope = $scope;
-
                     $scope.zTree = {}
                     $scope.zTree.selectNode = function(node) {
                         var clickNodeScope = getScopeByNode(node);
@@ -108,7 +114,7 @@ angular
                             $scope.treeData.push(node);
                         }
                         $timeout(function() {
-                            refreshModel(getScopeByNode(parentNode));
+                            // refreshModel(getScopeByNode(parentNode));
                             expandNode(getScopeByNode(node));
                         })
                     }
@@ -117,9 +123,9 @@ angular
                         var parentData = scope.$parentNodeScope.node;
                         var children = parentData[$scope.options.childrenField];
                         children.splice($.inArray(targetNode, children)+1, 0,newNode);
-                        $timeout(function() {
-                            refreshModel(scope.$parentNodeScope);
-                        });
+                        // $timeout(function() {
+                        //     refreshModel(scope.$parentNodeScope);
+                        // });
                     }
                     $scope.zTree.delNode = function(node,index) {
                         var scope = getScopeByNode(node);
@@ -170,6 +176,14 @@ angular
                         }
                     }
 
+                    var eachNodeData = function(node,fn) {
+                        var i,list = node[$scope.options.childrenField];
+                        for(i=0;i<list.length;i++) {
+                            var node = list[i];
+                            fn(node);
+                            eachNodeData(node,fn);
+                        }
+                    }
                     var currentSelect = function(node) {
                         if(!getScopeByNode(node)) {
                             return;
@@ -332,6 +346,7 @@ angular
                         }
                     }
 
+                    this.$treeRootScope = $scope;
                 }],
                 compile: function(element, attrs, transclude) {
                     return function ( scope, element, attrs, ctrls ) {
@@ -386,7 +401,7 @@ angular
                 scope.transcludeScope.$internalScope = scope;
                 scope.transcludeScope.node = scope.node;
                 scope.transcludeScope.options = rootScope.options;
-                scope.transcludeScope.$nodeKey = ++rootScope.$keyCount;
+                scope.transcludeScope.$nodeKey = scope.node.$$_key;
                 scope.transcludeScope.$model = {
                     $index:scope.$index,
                     $isFirst:scope.$first,
@@ -413,4 +428,4 @@ angular
     });
 ;
 
-angular.module("z.angular.tree").run(["$templateCache", function($templateCache) {$templateCache.put("zangular/template/zTreeTemplate.html","<ul class=\"nav\"><li ng-repeat=\"node in node[options.childrenField] track by $id(node)\" class=\"z-tree-node\"><div z-tree-transclude=\"\"></div></li></ul>");}]);
+angular.module("z.angular.tree").run(["$templateCache", function($templateCache) {$templateCache.put("zangular/template/zTreeTemplate.html","<ul class=\"nav\"><li ng-repeat=\"node in node[options.childrenField] track by node.$$_key\" class=\"z-tree-node\"><div z-tree-transclude=\"\"></div></li></ul>");}]);

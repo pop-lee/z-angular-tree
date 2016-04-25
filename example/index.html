@@ -32,19 +32,33 @@
 <body ng-app="example">
     <div ng-controller="testController" class="container">
         <div class="row">
-            <pre class="col-md-12">
-                Some features are not supported yet,
-                default options:
-                <code class="json">
-                    options = {
-                        childrenField:"children",
-                        leafNodeCanSelect:true,
-                        canMultiple:true,
-                        useToggle:false
-                    }
+            <div class="col-md-12">
+                <pre>
+                    Some features are not supported yet,
+                    default options:
+                    <code class="json">
+                        options = {
+                            childrenField:"children",
+                            leafNodeCanSelect:true,
+                            canMultiple:true,
+                            useToggle:false
+                        }
+                    </code>
+                </pre>
+            </div>
+            <div class="col-md-12">
+                <code class="col-md-12">
+                    CurrentSelect :
+                    <div ng-if="select.length === 0">空</div>
+                    <div ng-repeat="node in select">{{node.label}}</div>
                 </code>
-            </pre>
-            <div z-tree="tree" tree-data="planList" class="col-md-12">
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-xs btn btn-info" ng-click="newNode()">newNode</button>
+            </div>
+            <div z-tree="tree" tree-data="planList"
+                 current-select="select"
+                 class="col-md-12">
                 <div class="tree-item"
                      ng-class="{
                          'tree-item-selected':$model.$selected,
@@ -76,6 +90,7 @@
     <script>
         angular.module("example",['z.angular.tree'])
         .controller('testController',['$scope',function($scope) {
+            $scope.createFlag = 0;
             $scope.planList =
                     [{
                         "label": "a",
@@ -99,28 +114,31 @@
 
             // 引用树形对象,用来操作树
             $scope.tree = {};
+            $scope.select = [];
             $scope.delNode = function(node) {
                 $scope.tree.delNode(node);
             }
             $scope.addSameLevelNode = function(node) {
-                var newNode = {
-                    "label": "new",
-                    "children": []
-                }
-                $scope.tree.addAfterNode(newNode,node);
+                $scope.tree.addAfterNode(getNewNode(),node);
             }
             $scope.addSubNode = function(node) {
-                var newNode = {
-                    "label": "new",
-                    "children": []
-                }
-                $scope.tree.addChildNode(newNode,node);
+                $scope.tree.addChildNode(getNewNode(),node);
             }
             $scope.toggle = function(node) {
                 $scope.tree.toggle(node);
             }
             $scope.selectNode = function(event,node) {
                 $scope.tree.selectNode(node);
+            }
+            $scope.newNode = function() {
+                $scope.tree.addChildNode(getNewNode());
+            }
+
+            var getNewNode = function() {
+                return {
+                    "label": "new" + (++$scope.createFlag),
+                    "children": []
+                }
             }
         }]);
 
