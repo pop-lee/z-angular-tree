@@ -36,7 +36,13 @@
 
 <p>基于AngularJS1.2.x版本开发,JQuery1.x即可</p>
 
-<p><code>如果您觉得好用,麻烦给加颗星!!谢谢支持!</code></p>
+<p>如果您觉得好用,麻烦给加颗星!!谢谢支持!</p>
+
+<h2>
+<a id="栗子-example" class="anchor" href="#%E6%A0%97%E5%AD%90-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>栗子 <a href="http://pop-lee.github.io/z-angular-tree/example/index.html">example</a>
+</h2>
+
+<p>例子可直接下载运行,无需构建,也可使用gulp进行构建运行</p>
 
 <h2>
 <a id="目前为止实现的功能有-support-feature" class="anchor" href="#%E7%9B%AE%E5%89%8D%E4%B8%BA%E6%AD%A2%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%8A%9F%E8%83%BD%E6%9C%89-support-feature" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>目前为止实现的功能有 Support Feature</h2>
@@ -46,15 +52,18 @@
 <li>同级节点新增</li>
 <li>子集节点新增</li>
 <li>删除节点</li>
+<li>选中节点</li>
+<li>通过数据源配置选中节点</li>
 </ol>
 
 <p>还可配置</p>
 
 <ul>
-<li>数据源中子节点的字段名称</li>
-<li>是否只有叶子节点才可选中</li>
-<li>是否使用节点互斥</li>
-<li>是否允许多选</li>
+<li>childrenField 数据源中子节点的字段名称(default "children")</li>
+<li>leafNodeCanSelect 是否只有叶子节点才可选中(default true)</li>
+<li>useToggle 是否使用节点互斥(default false)</li>
+<li>canMultiple 是否允许多选(default true)</li>
+<li>defaultCollapsed 默认子节点是折叠还是展开状态(default false)</li>
 </ul>
 
 <p>后续会陆续加入缓动效果和拖拽功能</p>
@@ -66,17 +75,13 @@
 </code></pre>
 
 <h2>
-<a id="栗子-example" class="anchor" href="#%E6%A0%97%E5%AD%90-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>栗子 <a href="http://pop-lee.github.io/z-angular-tree/example/index.html">example</a>
-</h2>
-
-<p>例子可直接下载运行,无需构建,也可使用gulp进行构建运行</p>
-
-<h2>
 <a id="开始-get-start" class="anchor" href="#%E5%BC%80%E5%A7%8B-get-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>开始 Get Start</h2>
 
-<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
     <span class="pl-c">&lt;!-- node context 节点内容 --&gt;</span>
     &lt;<span class="pl-ent">label</span>&gt;this is a node&lt;/<span class="pl-ent">label</span>&gt;
+    <span class="pl-c">&lt;!-- node context 节点的子节点位置 --&gt;</span>
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node-children</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
 &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
 
 <h3>
@@ -115,6 +120,10 @@
     -- hasSelect:"{{$model.$hasSelect}}"
     -- selected:"{{$model.$selected}}"
     -- nodeLevel:"{{$model.$nodeLevel}}"
+    -- index:"{{$model.$index}}"
+    -- isFirst:"{{$model.$isFirst}}"
+    -- isLast:"{{$model.$isLast}}"
+    -- isMiddle:"{{$model.$isMiddle}}"
 &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
 
 <h3>
@@ -124,10 +133,11 @@
 
 <p>$scope.tree 就是引用了树形控件的对象,可以进行如下调用</p>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">toggle</span>(node)
-<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSameLevelNode</span>(node)
-<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSubNode</span>(node)
-<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">delNode</span>(node)</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">toggle</span>(node);
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSameLevelNode</span>(node);
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSubNode</span>(node);
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">delNode</span>(node);
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">selectNode</span>(node);</pre></div>
 
 <h3>
 <a id="添加事件-event-handle" class="anchor" href="#%E6%B7%BB%E5%8A%A0%E4%BA%8B%E4%BB%B6-event-handle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>添加事件 event handle</h3>
@@ -146,13 +156,13 @@
 
 <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
     &lt;<span class="pl-ent">button</span>&gt;test&lt;/<span class="pl-ent">button</span>&gt;
-    &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node</span> <span class="pl-e">ng-class</span>=<span class="pl-s"><span class="pl-pds">"</span>{'collapsed':$model.$collapsed}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node-children</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
 &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
 
 <p>or</p>
 
 <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span>=<span class="pl-s"><span class="pl-pds">"</span>tree<span class="pl-pds">"</span></span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
-    &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node</span> <span class="pl-e">ng-class</span>=<span class="pl-s"><span class="pl-pds">"</span>{'collapsed':$model.$collapsed}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node-children</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
     &lt;<span class="pl-ent">button</span>&gt;test&lt;/<span class="pl-ent">button</span>&gt;
 &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
 
@@ -163,7 +173,7 @@
     &lt;<span class="pl-ent">div</span>&gt;
         &lt;<span class="pl-ent">div</span>&gt;
             &lt;<span class="pl-ent">div</span>&gt;
-                &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node</span> <span class="pl-e">ng-class</span>=<span class="pl-s"><span class="pl-pds">"</span>{'collapsed':$model.$collapsed}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+                &lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree-node-children</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
             &lt;/<span class="pl-ent">div</span>&gt;
         &lt;/<span class="pl-ent">div</span>&gt;
     &lt;/<span class="pl-ent">div</span>&gt;
