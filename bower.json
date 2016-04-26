@@ -5,7 +5,8 @@
     "LiYunpeng <liyunpeng@live.com>"
   ],
   "main": [
-    "./dist/z-angular-tree.js"
+    "./dist/z-angular-tree.js",
+    "./dist/z-angular-tree.css"
   ],
   "ignore": [
     "gulpfile.js",
