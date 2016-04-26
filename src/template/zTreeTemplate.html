@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li ng-repeat="node in node[options.childrenField] track by node.$$_key" class="z-tree-node">
-        <div z-tree-transclude></div>
+    <li ng-repeat="node in node[options.childrenField] track by node.$$_key">
+        <div z-tree-node class="z-tree-node"></div>
     </li>
 </ul>

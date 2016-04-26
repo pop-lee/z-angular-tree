@@ -11,7 +11,7 @@ angular
         function ($timeout) {
             return {
                 restrict: 'AE',
-                template:'<div z-tree-node></div>',
+                template:'<div z-tree-node-children></div>',
                 scope: {
                     zTree:'=?',
                     treeData: '=',
@@ -358,9 +358,11 @@ angular
             };
         }
     ])
-    .directive("zTreeNode",['$compile','$templateCache','treeConfig', function($compile, $templateCache, treeConfig) {
+    .directive("zTreeNodeChildren",['$compile','$templateCache','treeConfig', function($compile, $templateCache, treeConfig) {
         return {
             restrict: 'AE',
+            template: '<div class="z-tree-node-children" ng-class="{\'collapsed\':$model.$collapsed}">',
+            replace:true,
             scope:true,
             controller: function() {
                 var template = $templateCache.get(treeConfig.templateUrl);
@@ -389,7 +391,7 @@ angular
     //         }
     //     };
     // })
-    .directive("zTreeTransclude", function() {//为了让递归的指令都共用rootParentScope
+    .directive("zTreeNode", function() {//为了让递归的指令都共用rootParentScope
         return {
             require: "^zTree",
             link: function(scope, element, attrs, controller) {

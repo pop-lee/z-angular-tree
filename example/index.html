@@ -27,6 +27,9 @@
             border-left-width: 5px;
             border-radius: 3px;
         }
+        .z-tree-node-children {
+            padding-left: 0px;
+        }
     </style>
 </head>
 <body ng-app="example">
@@ -83,7 +86,7 @@
                             -- isMiddle:"{{$model.$isMiddle}}"
                         </a>
                     </div>
-                    <div z-tree-node ng-class="{'collapsed':$model.$collapsed}"></div>
+                    <div z-tree-node-children></div>
                 </div>
             </div>
         </div>
