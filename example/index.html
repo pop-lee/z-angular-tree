@@ -123,7 +123,7 @@
                 $scope.tree.delNode(node);
             }
             $scope.addSameLevelNode = function(node) {
-                $scope.tree.addAfterNode(getNewNode(),node);
+                $scope.tree.addNode(getNewNode(),node);
             }
             $scope.addSubNode = function(node) {
                 $scope.tree.addChildNode(getNewNode(),node);
@@ -135,13 +135,12 @@
                 $scope.tree.selectNode(node);
             }
             $scope.newNode = function() {
-                $scope.tree.addChildNode(getNewNode());
+                $scope.tree.addNode(getNewNode());
             }
 
             var getNewNode = function() {
                 return {
-                    "label": "new" + (++$scope.createFlag),
-                    "children": []
+                    "label": "new" + (++$scope.createFlag)
                 }
             }
         }]);
