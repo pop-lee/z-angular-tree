@@ -143,6 +143,9 @@ angular
 
                         //此处不适用递归,引用去掉后让内存自动回收
                         eachTreeScope(scope,function(ns) {
+                            if(ns.$model.$selected) {
+                                $scope.currentSelect.splice($.inArray(ns.node,$scope.currentSelect),1);
+                            }
                             //在map中销毁所有已删除的节点
                             delete $scope.$nodeMap[ns.$nodeKey];
                         });
