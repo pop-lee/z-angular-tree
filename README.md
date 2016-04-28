@@ -89,8 +89,8 @@ tree-data="dataList",其中dataList的结构如：
 $scope.tree 就是引用了树形控件的对象,可以进行如下调用
 ```javascript
 $scope.tree.toggle(node);
-$scope.tree.addSameLevelNode(node);
-$scope.tree.addSubNode(node);
+$scope.tree.addNode(node);
+$scope.tree.addChildNode(node);
 $scope.tree.delNode(node);
 $scope.tree.selectNode(node);
 ```
