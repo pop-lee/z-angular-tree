@@ -106,24 +106,24 @@ angular
                         }
                     };
                     $scope.zTree.addChildNode = function(node,parentNode) {
-                        if (parentNode != null) {
-                            var children = parentNode[$scope.options.childrenField];
-                            if (children != null && children != undefined) {
-                                children.push(node);
-                            }
-                        } else {
-                            $scope.treeData.push(node);
+                        var children = parentNode[$scope.options.childrenField];
+                        if (children != null && children != undefined) {
+                            children.push(node);
                         }
                         $timeout(function() {
                             // refreshModel(getScopeByNode(parentNode));
                             expandNode(getScopeByNode(node));
                         })
                     }
-                    $scope.zTree.addAfterNode = function(newNode,targetNode) {
-                        var scope = getScopeByNode(targetNode);
-                        var parentData = scope.$parentNodeScope.node;
-                        var children = parentData[$scope.options.childrenField];
-                        children.splice($.inArray(targetNode, children)+1, 0,newNode);
+                    $scope.zTree.addNode = function(newNode,targetNode) {
+                        if(targetNode === void 0) {
+                            $scope.treeData.push(newNode);
+                        } else {
+                            var scope = getScopeByNode(targetNode);
+                            var parentData = scope.$parentNodeScope.node;
+                            var children = parentData[$scope.options.childrenField];
+                            children.splice($.inArray(targetNode, children)+1, 0,newNode);
+                        }
                         // $timeout(function() {
                         //     refreshModel(scope.$parentNodeScope);
                         // });
@@ -140,7 +140,6 @@ angular
                         }
                         children.splice(flag, 1);
                         scope.$parentNodeScope.$nodeChildren.splice(flag,1);
-
                         //此处不适用递归,引用去掉后让内存自动回收
                         eachTreeScope(scope,function(ns) {
                             if(ns.$model.$selected) {
@@ -190,9 +189,7 @@ angular
                         }
                     }
                     var currentSelect = function(node) {
-                        if(!getScopeByNode(node)) {
-                            return;
-                        }
+                        if(!getScopeByNode(node)) return;
 
                         var index = $.inArray(node,$scope.currentSelect);
                         if(index>=0) {
