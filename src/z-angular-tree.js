@@ -178,6 +178,7 @@ angular
                     }
 
                     var eachNodeData = function(node,fn) {
+                        if(node[$scope.options.childrenField] === void 0) node[$scope.options.childrenField]=[];
                         var i,list = node[$scope.options.childrenField];
                         for(i=0;i<list.length;i++) {
                             var node = list[i];
