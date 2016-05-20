@@ -77,6 +77,14 @@
 <h2>
 <a id="开始-get-start" class="anchor" href="#%E5%BC%80%E5%A7%8B-get-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>开始 Get Start</h2>
 
+<p>指令 Directive</p>
+
+<ul>
+<li>zTree 树的核心,使用它来创建树</li>
+<li>zTreeNodeChildren 代表节点的子节点,树形每个节点的子节点放置在这个指令内,所以若想将子节点放置某个位置,仅需控制此指令的位置即可</li>
+<li>zTreeNodeIndent 代表节点的缩进,通过此指令可以设置缩进,可将缩进放置在想要放置的某个位置,并且可以控制缩进量,可以通过修改z-tree-node-indent的class样式来调整每一个单元的缩进量,同时可通过该指令的值设置缩进多少个单元,如$model.nodeLevel个单元,也可设置为永远缩进1个单元等.</li>
+</ul>
+
 <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">z-tree</span> <span class="pl-e">tree-data</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
     <span class="pl-c">&lt;!-- node context 节点内容 --&gt;</span>
     &lt;<span class="pl-ent">label</span>&gt;this is a node&lt;/<span class="pl-ent">label</span>&gt;
@@ -134,8 +142,8 @@
 <p>$scope.tree 就是引用了树形控件的对象,可以进行如下调用</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">toggle</span>(node);
-<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSameLevelNode</span>(node);
-<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addSubNode</span>(node);
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addNode</span>(node);
+<span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">addChildNode</span>(node);
 <span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">delNode</span>(node);
 <span class="pl-smi">$scope</span>.<span class="pl-smi">tree</span>.<span class="pl-en">selectNode</span>(node);</pre></div>
 
