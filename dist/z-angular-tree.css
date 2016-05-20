@@ -1,7 +1,9 @@
 .z-tree-node .collapsed {
   display: none; }
 
-.z-tree-node-children {
-  padding-left: 10px; }
+.z-tree-node-indent {
+  width: 5px;
+  height: 1px;
+  float: left; }
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3N0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBRUksY0FBZSxFQUNoQjs7QUFHSDtFQUNFLG1CQUFtQixFQUNwQiIsImZpbGUiOiJ6LWFuZ3VsYXItdHJlZS5jc3MiLCJzb3VyY2VzQ29udGVudCI6W251bGxdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ== */
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3N0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBRUksY0FBZSxFQUNoQjs7QUFHSDtFQUNFLFdBQVc7RUFDWCxZQUFZO0VBQ1osWUFBWSxFQUNiIiwiZmlsZSI6InotYW5ndWxhci10cmVlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbbnVsbF0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */

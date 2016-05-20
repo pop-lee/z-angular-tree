@@ -362,7 +362,7 @@ angular
     .directive("zTreeNodeChildren",['$compile','$templateCache','treeConfig', function($compile, $templateCache, treeConfig) {
         return {
             restrict: 'AE',
-            template: '<div class="z-tree-node-children" ng-class="{\'collapsed\':$model.$collapsed}">',
+            template: '<div ng-class="{\'collapsed\':$model.$collapsed}">',
             replace:true,
             scope:true,
             controller: function() {
@@ -376,22 +376,22 @@ angular
             }
         };
     }])
-    // .directive("zTreeSelectZone", function() {
-    //     return {
-    //         restrict: 'AE',
-    //         scope: true,
-    //         require: "^zTree",
-    //         link: function( scope, element, attrs, ctrls) {
-    //             element.on('click',function(event) {
-    //                 scope.$apply(function() {
-    //                     ctrls.$treeRootScope.zTree.selectNode(scope.node);
-    //                 });
-    //                 //阻止事件继续向上冒泡
-    //                 event.stopPropagation();
-    //             });
-    //         }
-    //     };
-    // })
+    .directive("zTreeNodeIndent", function() {
+        return {
+            restrict: 'AE',
+            require: "^zTree",
+            scope:{zTreeNodeIndent:'='},
+            link: function (scope, element, attrs, ctrls) {
+                scope.$watch('count',function(newValue) {
+                    var c = scope.zTreeNodeIndent?scope.zTreeNodeIndent:0;
+                       element.empty();
+                       for(var i = 0;i<c;i++) {
+                           element.append("<div class='z-tree-node-indent'></div>");
+                       }
+                });
+            }
+        };
+    })
     .directive("zTreeNode", function() {//为了让递归的指令都共用rootParentScope
         return {
             require: "^zTree",
