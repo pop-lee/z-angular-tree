@@ -21,15 +21,12 @@
             border-left-color: #5bc0de;
         }
         .tree-item {
-            padding: 0px;
-            padding-left: 10px;
+            float: left;
             border: 1px solid #eee;
             border-left-width: 5px;
             border-radius: 3px;
         }
-        .z-tree-node-children {
-            padding-left: 0px;
-        }
+
     </style>
 </head>
 <body ng-app="example">
@@ -86,7 +83,12 @@
                             -- isMiddle:"{{$model.$isMiddle}}"
                         </a>
                     </div>
-                    <div z-tree-node-children></div>
+                    <div>
+                        <div style="float: left" z-tree-node-indent="1">
+
+                        </div>
+                        <div style="float: left" z-tree-node-children></div>
+                    </div>
                 </div>
             </div>
         </div>
