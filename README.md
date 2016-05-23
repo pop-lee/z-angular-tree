@@ -34,10 +34,11 @@ bower install z-angular-tree
 
 ## 开始 Get Start
 
-指令 Directive
+### 指令 Directive
 * zTree 树的核心,使用它来创建树
 * zTreeNodeChildren 代表节点的子节点,树形每个节点的子节点放置在这个指令内,所以若想将子节点放置某个位置,仅需控制此指令的位置即可
-* zTreeNodeIndent 代表节点的缩进,通过此指令可以设置缩进,可将缩进放置在想要放置的某个位置,并且可以控制缩进量,可以通过修改z-tree-node-indent的class样式来调整每一个单元的缩进量,同时可通过该指令的值设置缩进多少个单元,如$model.nodeLevel个单元,也可设置为永远缩进1个单元等.
+* zTreeNodeIndent 代表节点的缩进(可选,当然也可通过其他方式,如z-tree-node-children的class自定义样式),通过此指令可以设置缩进,可将缩进放置在想要放置的某个位置,并且可以控制缩进量,可以通过修改z-tree-node-indent的class样式来调整每一个单元的缩进量,同时可通过该指令的值设置缩进多少个单元,如$model.nodeLevel个单元,也可设置为永远缩进1个单元等.
+
 
 
 
@@ -45,7 +46,7 @@ bower install z-angular-tree
 <div z-tree tree-data="dataList">
     <!-- node context 节点内容 -->
     <label>this is a node</label>
-    <!-- node context 节点的子节点位置 -->
+    <!-- node children position 节点的子节点位置 -->
     <div z-tree-node-children></div>
 </div>
 ```
