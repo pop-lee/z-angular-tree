@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <title>z-angular-tree</title>
     <script src="jquery.js"></script>
-    <script src="angular.1.2.29.js"></script>
-    <script src="bootstrap.3.1.1.js"></script>
+    <script src="angular.js"></script>
+    <script src="angular-animate.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="ui-bootstrap.js"></script>
     <script src="highlight.pack.min.js"></script>
     <script src="../dist/z-angular-tree.js"></script>
-    <link rel="stylesheet" href="bootstrap.3.1.1.css" />
+    <link rel="stylesheet" href="bootstrap.css" />
     <link rel="stylesheet" href="../dist/z-angular-tree.css" />
     <style>
         .tree-item.tree-item-has-select {
@@ -25,6 +27,10 @@
             border: 1px solid #eee;
             border-left-width: 5px;
             border-radius: 3px;
+        }
+
+        .z-tree-node .collapsed {
+            display : block;
         }
 
     </style>
@@ -83,9 +89,8 @@
                             -- isMiddle:"{{$model.$isMiddle}}"
                         </a>
                     </div>
-                    <div>
+                    <div style="float: left" uib-collapse="$model.$collapsed">
                         <div style="float: left" z-tree-node-indent="1">
-
                         </div>
                         <div style="float: left" z-tree-node-children></div>
                     </div>
@@ -94,7 +99,7 @@
         </div>
     </div>
     <script>
-        angular.module("example",['z.angular.tree'])
+        angular.module("example",['z.angular.tree','ngAnimate','ui.bootstrap.collapse'])
         .controller('testController',['$scope',function($scope) {
             $scope.createFlag = 0;
             $scope.planList =

@@ -1,7 +1,7 @@
 # Z-Angular-Tree
 ##　　　———— By LiYunpeng（云鹏@大连）
 
-基于AngularJS1.2.x版本开发,JQuery1.x即可
+基于AngularJS1.2.x版本开发,支持1.2.x或更高(Angular 1.2.x or higher),JQuery1.x即可
 
 如果您觉得好用,麻烦给加颗星!!谢谢支持!
 
@@ -17,6 +17,7 @@
 * 删除节点
 * 选中节点
 * 通过数据源配置选中节点
+* 可根据需求自行加入缓动动画(与其他库无任何依赖),可参看例子(例子中使用的是angular-animate以及ui-bootstrap中的collapse)
 
 还可配置
 * childrenField 数据源中子节点的字段名称(default "children")
@@ -25,7 +26,7 @@
 * canMultiple 是否允许多选(default true)
 * defaultCollapsed 默认子节点是折叠还是展开状态(default false)
 
-后续会陆续加入缓动效果和拖拽功能
+后续会加入拖拽功能
 
 ## 安装 install
 ```
