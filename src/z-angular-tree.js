@@ -362,7 +362,7 @@ angular
     .directive("zTreeNodeChildren",['$compile','$templateCache','treeConfig', function($compile, $templateCache, treeConfig) {
         return {
             restrict: 'AE',
-            template: '<div class="z-tree-node-children" ng-class="{\'collapsed\':$model.$collapsed}">',
+            template: '<div class="z-tree-node-children" ng-class="{\'collapsed\':$model.$collapsed,\'z-tree-root-level\':void(0)===$model.$nodeLevel}">',
             replace:true,
             scope:true,
             controller: function() {
