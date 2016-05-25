@@ -4,9 +4,12 @@
 .z-tree-node-children {
   padding-left: 10px; }
 
+.z-tree-root-level.z-tree-node-children {
+  padding-left: 0px; }
+
 .z-tree-node-indent {
   width: 5px;
   height: 1px;
   float: left; }
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3N0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBRUksY0FBZSxFQUNoQjs7QUFHSDtFQUNFLG1CQUFtQixFQUNwQjs7QUFFRDtFQUNFLFdBQVc7RUFDWCxZQUFZO0VBQ1osWUFBWSxFQUNiIiwiZmlsZSI6InotYW5ndWxhci10cmVlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbbnVsbF0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3N0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBRUksY0FBZSxFQUNoQjs7QUFHSDtFQUNFLG1CQUFtQixFQUNwQjs7QUFFRDtFQUNFLGtCQUFrQixFQUNuQjs7QUFFRDtFQUNFLFdBQVc7RUFDWCxZQUFZO0VBQ1osWUFBWSxFQUNiIiwiZmlsZSI6InotYW5ndWxhci10cmVlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbbnVsbF0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */
