@@ -191,11 +191,15 @@ angular
                     var currentSelect = function(node) {
                         if(!getScopeByNode(node)) return;
 
-                        var index = $.inArray(node,$scope.currentSelect);
-                        if(index>=0) {
-                            $scope.currentSelect.splice(index,1);
+                        if($scope.options.canMultiple) {
+                            var index = $.inArray(node,$scope.currentSelect);
+                            if(index>=0) {
+                                $scope.currentSelect.splice(index,1);
+                            } else {
+                                $scope.currentSelect.push(node);
+                            }
                         } else {
-                            $scope.currentSelect.push(node);
+                            $scope.currentSelect = [node];
                         }
                     }
 
